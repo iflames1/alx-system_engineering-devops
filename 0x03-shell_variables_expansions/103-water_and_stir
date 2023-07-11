@@ -1,2 +1,2 @@
-#!/bin/bash
-echo $(( ${WATER//[^0-9]} + ${STIR//[^0-9]} ))
+:#!/bin/bash
+echo "$((${WATER//[!0-9]} + ${STIR//[!0-9]}))"
