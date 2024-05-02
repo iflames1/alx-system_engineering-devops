@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This script
+
+
+while IFS=: read -r username _ userid _ homedir _; do
+	echo "The user $username is part of the $groupid gang, lives in $homedir and rides $car. $userid's place is protected by the passcode $passwd, more info about the user here: $info"
+done < /etc/passwd
