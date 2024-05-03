@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# This script
+
+PID=$(pgrep -f '4-to_infinity_and_beyond')
+
+if [ -z "$PID" ]; then
+    echo "No matching process found."
+else
+    # Kill the process using the PID
+    kill "$PID"
+    echo "Process terminated."
+fi
