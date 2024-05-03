@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# This displays the PID, along with the process name
+# of processes whose name contain the word bash.
+
+script_pid=$$
+
+process_list=$(pgrep bash)
+
+for pid in $process_list; do
+    if [ "$pid" -ne "$script_pid" ]; then
+        process_name=$(ps -p "$pid" -o comm=)
+        echo "$pid $process_name"
+    fi
+done
