@@ -3,9 +3,26 @@
 
 sudo apt-get update
 sudo apt-get -y install nginx
+
+# Allow Nginx through the firewall
 sudo ufw allow 'Nginx HTTP'
-# Configure nginx to listen on port 80 and serve "Hello World!" at the root
+
+# Configure Nginx to serve "Hello World!" at the root
 sudo bash -c 'echo "Hello World!" > /var/www/html/index.html'
 
-# Restart nginx
-sudo service nginx restart
+# Ensure the default Nginx server block is pointing to the correct root directory
+sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF'
