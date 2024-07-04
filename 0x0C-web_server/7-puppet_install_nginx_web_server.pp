@@ -1,35 +1,24 @@
-# Define a class to install and configure Nginx
+# Setup New Ubuntu server with nginx
 
-class nginx_setup {
-
-  # Ensure the Nginx package is installed
-  package { 'nginx':
-    ensure => installed,
-  }
-
-  # Ensure the Nginx service is running and enabled to start at boot
-  service { 'nginx':
-    ensure     => running,
-    enable     => true,
-    require    => Package['nginx'],
-  }
-
-  # Define the content for the Hello World page
-  file { '/var/www/html/index.html':
-    ensure  => file,
-    content => 'Hello World!',
-    require => Package['nginx'],
-  }
-
-  # Define the content for the Nginx configuration file
-  file { '/etc/nginx/sites-available/default':
-    ensure  => file,
-    content => template('nginx_setup/nginx_default.erb'),
-    require => Package['nginx'],
-    notify  => Service['nginx'],
-  }
-
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
 }
 
-# Apply the Nginx setup class
-include nginx_setup
+package { 'nginx':
+	ensure => 'installed',
+	require => Exec['update system']
+}
+
+file {'/var/www/html/index.html':
+	content => 'Hello World!'
+}
+
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
+}
+
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
+}
